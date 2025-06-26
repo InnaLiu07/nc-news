@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./ArticlesList.css";
 import axios from "axios";
 
@@ -9,12 +10,10 @@ const ArticlesList = () => {
     axios
       .get("http://localhost:7777/api/articles")
       .then((response) => {
-        console.log("API Response:", response);
         setArticles(response.data.articles);
         setLoading(false);
       })
       .catch((error) => {
-        console.error("API Error:", error);
         console.error(error);
       });
   }, []);
@@ -27,7 +26,11 @@ const ArticlesList = () => {
   return (
     <main className="articles-list">
       {articles.map((article) => (
-        <article key={article.article_id} className="article-card">
+        <Link
+          key={article.article_id}
+          to={`/articles/${article.article_id}`}
+          className="article-card"
+        >
           <img src={article.article_img_url} alt={`Img for ${article.title}`} />
           <div className="article-info">
             <h2>{article.title}</h2>
@@ -45,7 +48,7 @@ const ArticlesList = () => {
               Published {new Date(article.created_at).toLocaleDateString()}
             </p>
           </div>
-        </article>
+        </Link>
       ))}
     </main>
   );
